@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Test FullCalendar</title>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #calendar { max-width: 900px; margin: 40px auto; min-height: 600px; }
+  </style>
+</head>
+<body>
+  <h1>Test FullCalendar</h1>
+  <div id="calendar"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const calendarEl = document.getElementById('calendar');
+      console.log('calendarEl exists?', !!calendarEl, 'FullCalendar:', typeof FullCalendar);
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'fr',
+        events: "{{ path('app_tache_calendar') }}"
+      });
+      calendar.render();
+      console.log('calendar rendered');
+    });
+  </script>
+</body>
+</html>

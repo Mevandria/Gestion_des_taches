@@ -1,0 +1,41 @@
+/* Styles spécifiques à la page Mes Tâches */
+body {
+    background-color: #f7f9fc;
+}
+
+/* Titre */
+h1 {
+    color: #2c3e50;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Table */
+.table {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.table th {
+    background-color: #3498db;
+    color: white;
+    text-align: center;
+}
+
+.table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Boutons */
+.btn-primary {
+    background-color: #3498db;
+    border: none;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #95a5a6;
+    color: white;
+}

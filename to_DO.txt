@@ -1,0 +1,4 @@
+Ajouter une date limite (deadline)/
+Envoyer une notification par user lors du partage d’une tâche /
+Attacher un fichier à une tâche/
+Intégration d’un calendrier

@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Tâches{% endblock %}
+
+{% block body %}
+<h1>Mes Tâches</h1>
+
+<a href="{{ path('app_tache_new') }}" class="btn btn-primary mb-3">➕ Nouvelle tâche</a>
+<a href="{{ path('notification_index') }}" class="btn btn-primary mb-3">  Notifications
+    {% if app.user %}
+        {% set unread = app.user.notifications|filter(n => not n.isRead)|length %}
+        {% if unread > 0 %}
+            <span style="color: red; font-weight: bold;">({{ unread }})</span>
+        {% endif %}
+    {% endif %}
+</a>
+
+<a href="{{ path('calendar_view') }}"class="btn btn-primary mb-3">Voir le calendrier</a>
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Début</th>
+            <th>Deadline</th>
+            <th>État</th>
+            <th>Créer par</th>
+            <th>Partagé avec</th>
+            <th>Fichier Joint</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for tache in tache %}
+        <tr>
+            <td>{{ tache.Titre }}</td>
+            <td>{{ tache.dateDebut ? tache.dateDebut|date('d/m/Y') : '—' }}</td>
+            <td>  
+                {% if tache.deadline %}
+                    {{ tache.deadline|date('d/m/Y H:i') }}
+                {% else %}
+                    Aucune
+                {% endif %}
+            </td>
+            <td>
+                <form method="post" action="{{ path('tache_toggle', {'id': tache.id}) }}" style="display:inline;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('toggle' ~ tache.id) }}">
+                    {% if tache.estFait() %}
+                        <button class="btn btn-sm btn-success">✔ Reprendre</button>
+                    {% else %}
+                        <button class="btn btn-sm btn-outline-primary">✔ Terminer</button>
+                    {% endif %}
+                </form>
+            </td>
+            <td>
+                {% if tache.owner.email == app.user%}
+                        Vous
+                {% else %}
+                     {{tache.owner.email}}
+                {% endif %}
+            </td>
+            <td>
+                {% for user in tache.partagerAvec %}
+                        <li>{{ user.email }}</li>
+                {% else %}
+                        <li>Aucun utilisateur</li>
+                {% endfor %}
+            </td>
+            <td>
+                <ul>
+                    {% for fichier in tache.fichierTaches %}
+                        <li>
+                            <a href="{{ asset('uploads/fichiers/' ~ fichier.routeFichier) }}" target="_blank">
+                                {{ fichier.nomFichier }}
+                            </a>
+                        </li>
+                    {% else %}
+                        <li>Aucun fichier joint.</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <a href="{{ path('app_tache_edit', {'id': tache.id}) }}" class="btn btn-sm btn-outline-secondary">✏️ Modifier</a>
+                <form method="post" action="{{ path('app_tache_delete', {'id': tache.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer cette tâche ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tache.id) }}">
+                    <button class="btn btn-sm btn-outline-danger">🗑 Supprimer</button>
+                </form>
+            </td>
+        </tr>
+    {% else %}
+        <tr><td colspan="4">Aucune tâche trouvée.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

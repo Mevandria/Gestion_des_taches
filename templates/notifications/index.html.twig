@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes notifications{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+       <h1>Mes notifications</h1>
+
+        <ul>
+            {% for notification in notifications %}
+                <li>
+                    {{ notification.message }} - 
+                    {{ notification.createdAt|date('d/m/Y H:i') }}
+<div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+    <div>
+        {{ notification.message }}
+        {% if not notification.isRead %}
+            <span class="badge bg-warning text-dark">Non lu</span>
+        {% else %}
+            <span class="badge bg-success">Lu</span>
+        {% endif %}
+    </div>
+    
+    {% if not notification.isRead %}
+        <form method="post" action="{{ path('notification_mark_as_read', { id: notification.id }) }}" class="mb-0">
+            <input type="hidden" name="_token" value="{{ csrf_token('mark_read_' ~ notification.id) }}">
+            <button type="submit" class="btn btn-outline-primary btn-sm">Marquer comme lu</button>
+        </form>
+    {% else %}
+        <button type="button" class="btn btn-secondary btn-sm" disabled>Déjà lu</button>
+    {% endif %}
+</div>
+                </li>
+            {% else %}
+                <li>Aucune notification</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+{% endblock %}
